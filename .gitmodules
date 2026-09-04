@@ -1,0 +1,3 @@
+[submodule "frontend/sharkie"]
+	path = frontend/sharkie
+	url = git@github.com:elma1989/sharkie.git
