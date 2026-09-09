@@ -4,3 +4,6 @@
 [submodule "frontend/join"]
 	path = frontend/join
 	url = git@github.com:elma1989/join.git
+[submodule "frontend/portfolio"]
+	path = frontend/portfolio
+	url = git@github.com:elma1989/portfolio.git
