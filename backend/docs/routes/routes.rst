@@ -5,3 +5,4 @@ Routes
     :maxdepth: 2
 
     portfolio
+    projects
