@@ -11,3 +11,4 @@ Portfolio Backend documentation
    :caption: Contents:
 
    routes/routes
+   functions

@@ -36,6 +36,13 @@ def getContactData():
     else: return '', 400
 
 def notify_me(name:str, email:str, question:str):
+    """
+    Notifies owner after form submit.
+
+    :param name: Name of requester.
+    :param email: E-Mail of requester.
+    :param question: Question of requester.
+    """
     password = os.environ['MAIL_PASSWORD']
     msg = EmailMessage()
     msg['Subject'] = f'Portfolioanfrage von {name}'
@@ -57,6 +64,12 @@ def notify_me(name:str, email:str, question:str):
         smtp.send_message(msg)
 
 def send_confirm(name:str, email:str):
+    """
+    Sends a confirm e-mail to requester.
+
+    :param name: Name of requester.
+    :param email: E-Mail of requester.
+    """
     password = os.environ['MAIL_PASSWORD']
     msg = EmailMessage()
     msg['Subject'] = f'Ihre Portfolioanfrage'
