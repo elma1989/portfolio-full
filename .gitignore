@@ -1,2 +1,5 @@
 env/
 backend/__pycache__/
+backend/docs/Makefile
+backend/docs/_build
+backend/docs/make.bat

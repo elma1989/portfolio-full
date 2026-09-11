@@ -5,6 +5,7 @@ import smtplib, os
 
 portfolio = Blueprint('portfolio', __name__)
 PORTFOLIO_DIR = BASE_DIR / 'frontend/portfolio/dist/portfolio/browser'
+DOC_DIR = BASE_DIR / 'backend/docs/_build/html'
 
 @portfolio.route('/')
 def portfolio_index():
@@ -14,17 +15,34 @@ def portfolio_index():
 def portfolio_data(path):
     return send_from_directory(PORTFOLIO_DIR, path)
 
+@portfolio.route('/docs/')
+def portfolio_doc_index():
+    return send_from_directory(DOC_DIR, 'index.html')
+
+@portfolio.route('/docs/<path:path>')
+def portfolio_doc_files(path):
+    return send_from_directory(DOC_DIR, path)
+
 @portfolio.route('/contact', methods=['POST'])
 def getContactData():
     data = request.get_json()
     name = data.get('name')
     email = data.get('email')
     question = data.get('question')
-    notify_me(name, email, question)
-    send_confirm(name, email)
-    return '', 200
+    if (name and email and question):
+        notify_me(name, email, question)
+        send_confirm(name, email)
+        return '', 200
+    else: return '', 400
 
 def notify_me(name:str, email:str, question:str):
+    """
+    Notifies owner after form submit.
+
+    :param name: Name of requester.
+    :param email: E-Mail of requester.
+    :param question: Question of requester.
+    """
     password = os.environ['MAIL_PASSWORD']
     msg = EmailMessage()
     msg['Subject'] = f'Portfolioanfrage von {name}'
@@ -46,6 +64,12 @@ def notify_me(name:str, email:str, question:str):
         smtp.send_message(msg)
 
 def send_confirm(name:str, email:str):
+    """
+    Sends a confirm e-mail to requester.
+
+    :param name: Name of requester.
+    :param email: E-Mail of requester.
+    """
     password = os.environ['MAIL_PASSWORD']
     msg = EmailMessage()
     msg['Subject'] = f'Ihre Portfolioanfrage'
