@@ -5,6 +5,7 @@ import smtplib, os
 
 portfolio = Blueprint('portfolio', __name__)
 PORTFOLIO_DIR = BASE_DIR / 'frontend/portfolio/dist/portfolio/browser'
+DOC_DIR = BASE_DIR / 'backend/docs/_build/html'
 
 @portfolio.route('/')
 def portfolio_index():
@@ -14,15 +15,25 @@ def portfolio_index():
 def portfolio_data(path):
     return send_from_directory(PORTFOLIO_DIR, path)
 
+@portfolio.route('/docs/')
+def portfolio_doc_index():
+    return send_from_directory(DOC_DIR, 'index.html')
+
+@portfolio.route('/docs/<path:path>')
+def portfolio_doc_files(path):
+    return send_from_directory(DOC_DIR, path)
+
 @portfolio.route('/contact', methods=['POST'])
 def getContactData():
     data = request.get_json()
     name = data.get('name')
     email = data.get('email')
     question = data.get('question')
-    notify_me(name, email, question)
-    send_confirm(name, email)
-    return '', 200
+    if (name and email and question):
+        notify_me(name, email, question)
+        send_confirm(name, email)
+        return '', 200
+    else: return '', 400
 
 def notify_me(name:str, email:str, question:str):
     password = os.environ['MAIL_PASSWORD']
